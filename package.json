@@ -1,0 +1,19 @@
+{
+  "name": "solana-pay",
+  "version": "1.0.0",
+  "description": "This package will redirect to the solana pay for transaction",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "EBOS developer",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/pay": "^0.2.5",
+    "@solana/web3.js": "^1.91.2",
+    "axios": "^1.6.8",
+    "bignumber.js": "^9.1.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
