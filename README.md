@@ -1,6 +1,7 @@
 SETUP THE PROJECT
 
 In the VSCode terminal:
+
 Step 1: npm install
 
 Step 2: npm start
