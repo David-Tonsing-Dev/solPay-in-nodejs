@@ -104,7 +104,7 @@ app.post("/verify", async (req, res) => {
       return res.status(200).json({
         status: "Transaction verified",
         success: true,
-        signature: response.transaction.signature[0],
+        signature: response.transaction.signatures[0],
       });
     } else {
       return res.status(404).json({

@@ -1,0 +1,30 @@
+{
+    "EBO_001": {
+        "success": false,
+        "message": "User already exists"
+    },
+    "EBO_002": {
+        "success": false,
+        "message": "Something went wrong"
+    },
+    "EBO_003": {
+        "success": false,
+        "message": "User not found"
+    },
+    "EBO_004": {
+        "success": false,
+        "message": "Invalid api key"
+    },
+    "EBO_005": {
+        "success": false,
+        "message": "User's API key not match"
+    },
+    "EBO_006": {
+        "success": false,
+        "message": "API key not found"
+    },
+    "EBO_007": {
+        "success": false,
+        "message": "Some fields are missing!"
+    }
+}
