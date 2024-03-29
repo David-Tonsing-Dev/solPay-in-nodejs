@@ -8,12 +8,14 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 const userRouter = require("./routes/userRouters");
-const paymentRouter = require("./routes/paymentRouter");
+const bestURLPaymentRouter = require("./routes/bestURLPaymentRouter");
+const kolKartPaymentRouter = require("./routes/kolKartPaymentRouter");
 
 app.use(express.json());
 
 app.use("/users", userRouter);
-app.use("/payment", paymentRouter);
+app.use("/besturl/payment", bestURLPaymentRouter);
+app.use("/kolkart/payment", kolKartPaymentRouter);
 
 mongoose.connect(process.env.MONGODB_URL).then(() => {
   app.listen(PORT, () => {
