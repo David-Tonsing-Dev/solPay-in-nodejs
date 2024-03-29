@@ -54,7 +54,7 @@ const getQRCode = async (req, res) => {
       return res.status(400).json(errorMsg.EBO_007);
     }
 
-    const solAmount = convertUSDtoSOL(amount);
+    const solAmount = await convertUSDtoSOL(amount);
 
     const recipient = new PublicKey(walletAddress);
     const bigAmount = new BigNumber(solAmount);
@@ -76,7 +76,7 @@ const getQRCode = async (req, res) => {
     const ref = reference.toBase58();
     paymentRequests.set(ref, { recipient, bigAmount, memo });
     const { url } = urlData;
-    return res.status(200).json({ url: url.toString(), ref });
+    return res.status(200).json({ url: url.toString(), ref, sol: solAmount });
   } catch (err) {
     console.log("ERROR::: ", err);
     return res.status(500).json(errorMsg.EBO_002);
