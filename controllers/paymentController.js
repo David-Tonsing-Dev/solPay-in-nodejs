@@ -102,7 +102,7 @@ const verifyTransaction = async (req, res) => {
         signature: response.transaction.signatures[0],
       });
     } else {
-      return res.status(404).json({
+      return res.status(400).json({
         status: "Transaction not found",
         success: false,
       });
