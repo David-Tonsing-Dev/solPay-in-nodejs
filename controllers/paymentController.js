@@ -1,4 +1,49 @@
+const { Connection, Keypair, PublicKey } = require("@solana/web3.js");
+const { encodeURL, findReference, validateTransfer } = require("@solana/pay");
+const BigNumber = require("bignumber.js");
 const errorMsg = require("../messages/errors/error.json");
+const { convertUSDtoSOL } = require("../utils/helpers/index");
+
+const paymentRequests = new Map();
+
+async function generateUrl(recipient, amount, reference, label, message, memo) {
+  const url = encodeURL({
+    recipient,
+    amount,
+    reference,
+    label,
+    message,
+    memo,
+  });
+  return { url };
+}
+
+async function verifySolTransaction(reference) {
+  const paymentData = paymentRequests.get(reference.toBase58());
+  if (!paymentData) {
+    throw new Error("Payment request not found");
+  }
+  const { recipient, bigAmount, memo } = paymentData;
+  const connection = new Connection(
+    process.env.QUICK_NODE_DEVNET_RPC,
+    "confirmed"
+  );
+  const amount = bigAmount;
+
+  const found = await findReference(connection, reference);
+
+  const response = await validateTransfer(
+    connection,
+    found.signature,
+    { recipient, amount, splToken: undefined, reference },
+    { commitment: "confirmed" }
+  );
+
+  if (response) {
+    paymentRequests.delete(reference.toBase58());
+  }
+  return response;
+}
 
 const getQRCode = async (req, res) => {
   //http://localhost:8000/payment/getQRCode
@@ -9,8 +54,10 @@ const getQRCode = async (req, res) => {
       return res.status(400).json(errorMsg.EBO_007);
     }
 
+    const solAmount = convertUSDtoSOL(amount);
+
     const recipient = new PublicKey(walletAddress);
-    const bigAmount = new BigNumber(amount);
+    const bigAmount = new BigNumber(solAmount);
     const memo = `Thank you for purchasing this domain. [${domainName}]`;
     const label = `The buyer: ${userId}`;
     // const splToken = new PublicKey("HBZqrepL1G7CeNxnKtZh9QTWYwYUaFMjgezTdN3Lt6DU");
@@ -47,7 +94,7 @@ const verifyTransaction = async (req, res) => {
 
   try {
     const referencePublicKey = new PublicKey(reference);
-    const response = await verifyTransaction(referencePublicKey);
+    const response = await verifySolTransaction(referencePublicKey);
     if (response) {
       return res.status(200).json({
         status: "Transaction verified",

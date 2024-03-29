@@ -17,6 +17,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "generate-api-key": "^1.0.2",
-    "mongoose": "^8.2.4"
+    "mongoose": "^8.2.4",
+    "moralis": "^2.25.2"
   }
 }
