@@ -16,15 +16,10 @@ const authMiddleware = async (req, res, next) => {
       return res.status(400).json(errorMsg.EBO_006);
     }
 
-    if (apikey) {
-      const checkUser = await User.findOne({ apiKey: apikey });
-
-      if (!checkUser) return res.status(400).json(errorMsg.EBO_004);
-
-      if (checkUser.userId !== userId) {
-        return res.status(400).json(errorMsg.EBO_005);
-      }
+    if (apikey && apikey === process.env.APIKEY) {
       req.userId = userId;
+    } else {
+      return res.status(400).json(errorMsg.EBO_004);
     }
     next();
   } catch (err) {
