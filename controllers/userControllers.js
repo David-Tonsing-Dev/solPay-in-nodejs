@@ -1,5 +1,6 @@
 const { generateApiKey } = require("generate-api-key");
 const User = require("../models/userModel");
+const ApiKey = require("../models/apiKeyModel");
 const errorMsg = require("../messages/errors/error.json");
 
 const signup = async (req, res) => {
@@ -11,20 +12,19 @@ const signup = async (req, res) => {
       return res.status(400).json(errorMsg.EBO_001);
     }
 
-    const newAPIKey = generateApiKey({
-      method: "bytes",
-      length: 64,
-      prefix: "ebos_key",
-    });
+    const existingApiKey = await ApiKey.find();
+
+    if (existingApiKey.length < 1)
+      return res.status(401).json(errorMsg.EBO_004);
 
     await User.create({
       userId,
-      apiKey: newAPIKey,
+      apiKey: existingApiKey[0],
     });
 
     return res.status(200).json({
       success: true,
-      apiKey: newAPIKey,
+      apiKey: existingApiKey[0],
     });
   } catch (err) {
     console.log(err);

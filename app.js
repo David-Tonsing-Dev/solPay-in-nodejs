@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const { connectionWithMoralis } = require("./utils/helpers/index");
+const insertApiKeySeed = require("./seeder/apiKeyGenerator");
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -22,5 +23,6 @@ mongoose.connect(process.env.MONGODB_URL).then(() => {
     console.log(`Listening on port ${PORT}`);
     console.log("Database connection established");
     connectionWithMoralis();
+    insertApiKeySeed();
   });
 });
