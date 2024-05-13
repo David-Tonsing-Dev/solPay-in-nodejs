@@ -29,16 +29,13 @@ async function verifySolTransaction(reference) {
     "confirmed"
   );
   const amount = bigAmount;
-
   const found = await findReference(connection, reference);
-
   const response = await validateTransfer(
     connection,
     found.signature,
     { recipient, amount, splToken: undefined, reference },
     { commitment: "confirmed" }
   );
-
   if (response) {
     paymentRequests.delete(reference.toBase58());
   }
@@ -54,10 +51,10 @@ const getQRCode = async (req, res) => {
       return res.status(400).json(errorMsg.EBO_007);
     }
 
-    const solAmount = await convertUSDtoSOL(amount);
+    // const solAmount = await convertUSDtoSOL(amount);
 
     const recipient = new PublicKey(walletAddress);
-    const bigAmount = new BigNumber(solAmount);
+    const bigAmount = new BigNumber(amount);
     const memo = `Thank you for purchasing this domain. [${domainName}]`;
     const label = `The buyer: ${userId}`;
     // const splToken = new PublicKey("HBZqrepL1G7CeNxnKtZh9QTWYwYUaFMjgezTdN3Lt6DU");
@@ -76,7 +73,7 @@ const getQRCode = async (req, res) => {
     const ref = reference.toBase58();
     paymentRequests.set(ref, { recipient, bigAmount, memo });
     const { url } = urlData;
-    return res.status(200).json({ url: url.toString(), ref, sol: solAmount });
+    return res.status(200).json({ url: url.toString(), ref, sol: amount });
   } catch (err) {
     console.log("ERROR::: ", err);
     return res.status(500).json(errorMsg.EBO_002);
@@ -109,7 +106,11 @@ const verifyTransaction = async (req, res) => {
     }
   } catch (err) {
     console.log("ERROR:::", err);
-    return res.status(500).json(errorMsg.EBO_002);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: err.message
+  });
   }
 };
 

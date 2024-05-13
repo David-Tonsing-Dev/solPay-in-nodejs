@@ -2,21 +2,19 @@ const errorMsg = require("../messages/errors/error.json");
 const User = require("../models/userModel");
 
 const authMiddleware = async (req, res, next) => {
+ 
   try {
-    const { userId } = req.body;
-    console.log("userId", userId);
+    let token = req.headers.authorization;
+    const {userId} = req.body;
 
-    if (!userId) {
+    if (!token) {
       return res.status(400).json(errorMsg.EBO_003);
     }
 
-    const { apikey } = req.headers;
+     token = token.split(" ")[1];
 
-    if (!apikey) {
-      return res.status(400).json(errorMsg.EBO_006);
-    }
 
-    if (apikey && apikey === process.env.APIKEY) {
+    if (token && token === process.env.APIKEY) {
       req.userId = userId;
     } else {
       return res.status(400).json(errorMsg.EBO_004);
