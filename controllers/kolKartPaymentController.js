@@ -25,7 +25,7 @@ async function verifySolTransaction(reference) {
   }
   const { recipient, bigAmount, memo } = paymentData;
   const connection = new Connection(
-    process.env.QUICK_NODE_DEVNET_RPC,
+    process.env.QUICK_NODE_MAINNET_RPC,
     "confirmed"
   );
   const amount = bigAmount;

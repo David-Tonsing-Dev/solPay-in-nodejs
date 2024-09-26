@@ -25,7 +25,7 @@ async function verifySolTransaction(reference) {
   }
   const { recipient, bigAmount, memo } = paymentData;
   const connection = new Connection(
-    process.env.QUICK_NODE_DEVNET_RPC,
+    process.env.QUICK_NODE_MAINNET_RPC,
     "confirmed"
   );
   const amount = bigAmount;
@@ -109,8 +109,8 @@ const verifyTransaction = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Something went wrong",
-      error: err.message
-  });
+      error: err.message,
+    });
   }
 };
 
