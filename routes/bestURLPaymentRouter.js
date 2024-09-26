@@ -6,11 +6,7 @@ const {
 } = require("../controllers/bestURLPaymentController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
-bestURLPaymentRouter.post("/getQRCode", authMiddleware, getQRCode);
-bestURLPaymentRouter.post(
-  "/verify-transaction",
-  authMiddleware,
-  verifyTransaction
-);
+bestURLPaymentRouter.post("/getQRCode", getQRCode); // authMiddleware
+bestURLPaymentRouter.post("/verify-transaction", verifyTransaction); // authMiddleware
 
 module.exports = bestURLPaymentRouter;
